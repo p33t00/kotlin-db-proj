@@ -1,7 +1,13 @@
-fun main(args: Array<String>) {
-    println("Hello World!")
+import java.sql.ResultSet
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-    println("Program arguments: ${args.joinToString()}")
+fun main(args: Array<String>) {
+    val conf: Map<String, String> = args.map{it.split("=")}.map{it[0] to it[1]}.toMap()
+
+    val dbConnect = DbConnect(conf["host"], conf["user"], conf["pass"])
+    val dbApi = DbApi(dbConnect)
+    val rs: ResultSet? = dbApi.getBranches()
+    while (rs?.next() == true) {
+//        println(rs.getArray(0))
+        println(rs.getString("title"))
+    }
 }
